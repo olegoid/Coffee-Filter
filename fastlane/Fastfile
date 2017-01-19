@@ -26,7 +26,14 @@ platform :ios do
   desc "Submit a new Beta Build to Apple TestFlight"
   desc "This will also make sure the profile is up to date"
   lane :beta do
-    # match(type: "appstore")
+    # Provision machine with certs and profiles required for App Store deployment
+    match(
+      app_identifier: ["com.xamarin.Coffee"],
+      type: "appstore",
+      username: "xamarinqa@gmail.com,",
+      readonly: true,
+      team_name: "ZYWNCWEKU5"
+    )
 
     # Bump Info.plist
     bump_version_minor(@solution)
@@ -34,7 +41,8 @@ platform :ios do
     # Build ipa
     ipa_path = build_for_release(@solution.ios_projects.first)
     pilot(
-      ipa: ipa_path
+      ipa: ipa_path,
+      username: "xamarinqa@gmail.com"
     )
   end
 
