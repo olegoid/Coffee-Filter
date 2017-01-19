@@ -63,11 +63,5 @@
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\CoffeeFilter.Android\CoffeeFilter.Android.csproj">
-      <Project>{92ADA73A-72D7-4026-93D7-08ED5EF2A6B3}</Project>
-      <Name>CoffeeFilter.Android</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
 </Project>

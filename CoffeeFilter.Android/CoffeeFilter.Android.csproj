@@ -15,6 +15,7 @@
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <AndroidTlsProvider></AndroidTlsProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -234,7 +235,7 @@
   </ItemGroup>
   <Import Project="..\CoffeeFilter.Shared\CoffeeFilter.Shared.projitems" Label="Shared" Condition="Exists('..\CoffeeFilter.Shared\CoffeeFilter.Shared.projitems')" />
   <Import Project="..\CoffeeFilter.UITests.Shared\CoffeeFilter.UITests.Shared.projitems" Label="Shared" Condition="Exists('..\CoffeeFilter.UITests.Shared\CoffeeFilter.UITests.Shared.projitems')" />
-  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Resources\values-v21\" />
     <Folder Include="Resources\menu\" />

@@ -17,7 +17,7 @@ namespace CoffeeFilter.UITests
 	}
 
 	[TestFixture (Platform.iOS)]
-	[TestFixture (Platform.Android)]
+	// [TestFixture (Platform.Android)]
 	public class CoffeeFilterTests
 	{
 
