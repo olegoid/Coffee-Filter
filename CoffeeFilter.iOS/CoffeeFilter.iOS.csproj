@@ -231,6 +231,7 @@
       <DependentUpon>CoffeeAnimationView.cs</DependentUpon>
     </InterfaceDefinition>
     <InterfaceDefinition Include="Views\Main.storyboard" />
+    <InterfaceDefinition Include="LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
