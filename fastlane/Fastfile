@@ -8,19 +8,34 @@ platform :ios do
   before_all do
     @config = {}
     FastlaneCore::XamarinSolution.detect_solutions(@config)
+    @solution = FastlaneCore::XamarinSolutionParser.parse(@config[:xamarin_solution])
+
     restore_nugets(@config[:xamarin_solution])
     restore_xamarin_components(@config[:xamarin_solution])
   end
 
   desc "Runs all the tests"
   lane :test do
-    run_nunit_tests(@config[:xamarin_solution])
+    nunit_project = @solution.unit_test_projects.first
+    uitests_project = @solution.ui_test_projects.first
+
+    run_nunit_tests(nunit_project)
     run_ui_tests(@config[:xamarin_solution])
   end
 
   desc "Submit a new Beta Build to Apple TestFlight"
   desc "This will also make sure the profile is up to date"
   lane :beta do
+    # match(type: "appstore")
+
+    # Bump Info.plist
+    bump_version_minor(@solution)
+
+    # Build ipa
+    ipa_path = build_for_release(@solution.ios_projects.first)
+    pilot(
+      ipa: ipa_path
+    )
   end
 
   desc "Deploy a new version to the App Store"
@@ -32,5 +47,5 @@ platform :ios do
 
   error do |lane, exception|
   end
-  
+
 end

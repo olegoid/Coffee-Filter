@@ -93,6 +93,9 @@ module FastlaneCore
     # Info.plist file
     attr_accessor :info_plist
 
+    # Path to Info.plist
+    attr_accessor :info_plist_path
+
     def self.extended(project)
       require "plist"
 
@@ -118,13 +121,13 @@ module FastlaneCore
       end
 
       project_path = File.dirname(project.path)
-      info_plist_path = File.join(project_path, info_plist_path)
+      project.info_plist_path = File.join(project_path, info_plist_path)
 
-      if !info_plist_path or !File.file?(info_plist_path)
-        UI.user_error!("Could not find Info.plist file at path '#{info_plist_path}'")
+      if !project.info_plist_path or !File.file?(project.info_plist_path)
+        UI.user_error!("Could not find Info.plist file at path '#{project.info_plist_path}'")
       end
 
-      @info_plist = Plist::parse_xml(info_plist_path)
+      project.info_plist = Plist::parse_xml(project.info_plist_path)
     end
 
     def default_app_identifier

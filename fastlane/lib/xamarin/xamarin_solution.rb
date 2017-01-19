@@ -57,6 +57,21 @@ module FastlaneCore
       self.projects.select &l
     end
 
+    def ios_projects
+      l = lambda { |p| p.ios? }
+      self.projects.select &l
+    end
+
+    def mac_projects
+      l = lambda { |p| p.mac? }
+      self.projects.select &l
+    end
+
+    def tvos_projects
+      l = lambda { |p| p.tvos? }
+      self.projects.select &l
+    end
+
     def android_projects
       l = lambda { |p| p.android? }
       self.projects.select &l

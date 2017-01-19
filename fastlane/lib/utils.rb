@@ -3,11 +3,60 @@ require 'fastlane_core'
 
 require_relative 'xamarin/xamarin_solution_parser.rb'
 
-# Run Nunit tests
-def run_nunit_tests(solution_path)
-  solution = FastlaneCore::XamarinSolutionParser.parse(solution_path)
-  nunit_project = solution.unit_test_projects.first
+def bump_build_major(xamarin_solution)
+  xamarin_solution.apple_projects.each { |porject|
+    bundle_version = porject.info_plist['CFBundleVersion']
+    porject.info_plist['CFBundleVersion'] = (bundle_version.to_f + 1).to_s
+    save_info_plist(porject.info_plist, porject.info_plist_path)
+  }
+end
 
+def bump_build_minor(xamarin_solution)
+  xamarin_solution.apple_projects.each { |porject|
+    bundle_version = porject.info_plist['CFBundleVersion']
+    porject.info_plist['CFBundleVersion'] = (bundle_version.to_f + 0.1).round(2).to_s
+    save_info_plist(porject.info_plist, porject.info_plist_path)
+  }
+end
+
+def bump_version_major(xamarin_solution)
+  xamarin_solution.apple_projects.each { |porject|
+    bundle_version = porject.info_plist['CFBundleShortVersionString']
+    porject.info_plist['CFBundleShortVersionString'] = (bundle_version.to_f + 1).to_s
+    save_info_plist(porject.info_plist, porject.info_plist_path)
+  }
+end
+
+def bump_version_minor(xamarin_solution)
+  xamarin_solution.apple_projects.each { |porject|
+    bundle_version = porject.info_plist['CFBundleShortVersionString']
+    porject.info_plist['CFBundleShortVersionString'] = (bundle_version.to_f + 0.1).round(2).to_s
+    save_info_plist(porject.info_plist, porject.info_plist_path)
+  }
+end
+
+def save_info_plist(plist, plist_path)
+  File.open(plist_path, 'wb') do |f|
+    f.write(plist.to_plist)
+  end
+end
+
+# Build iOS app in Release|iPhone configuration and generate *.ipa file
+def build_for_release(ios_project)
+  FastlaneCore::UI.message("Building #{ios_project.path}. It might take a while...")
+  `xbuild /t:Clean #{ios_project.path}`
+  `xbuild /t:Build /p:Configuration=Release /p:Platform=iPhone /p:BuildIpa=true #{ios_project.path}`
+
+  ipa_files = []
+  Find.find(File.dirname(ios_project.path)) do |path|
+    ipa_files << path if path =~ /.*\.ipa$/
+  end
+  
+  ipa_files.first
+end
+
+# Run Nunit tests
+def run_nunit_tests(nunit_project)
   `xbuild /t:Clean #{nunit_project.path}`
   `xbuild /t:Build /p:Configuration=Debug #{nunit_project.path}`
 
@@ -29,10 +78,7 @@ def run_nunit_tests(solution_path)
 end
 
 # Run UI tests
-def run_ui_tests(solution_path)
-  solution = FastlaneCore::XamarinSolutionParser.parse(solution_path)
-  uitests_project = solution.ui_test_projects.first
-
+def run_ui_tests(uitests_project)
   `xbuild /t:Clean #{uitests_project.path}`
   `xbuild /t:Build /p:Configuration=Debug #{uitests_project.path}`
 
