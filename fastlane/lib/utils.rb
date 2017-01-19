@@ -115,9 +115,12 @@ def restore_nugets(solution_path)
 end
 
 # Restores Xamarin packages
-def restore_xamarin_components(solution_path)
-  FastlaneCore::UI.message("Restoring Xamarin Components...")
+def restore_xamarin_components(solution_path, username)
+  components_exe = xamarin_components_exe
+  FastlaneCore::UI.message("Login to Xamarin Components store...")
+  system("mono #{components_exe} login #{username}")
 
+  FastlaneCore::UI.message("Restoring Xamarin Components...")
   Open3.popen3("mono #{xamarin_components_exe} restore #{solution_path}") do |_, stdout, _, wait_thr|
     pid = wait_thr.pid
 

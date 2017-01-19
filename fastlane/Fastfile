@@ -11,7 +11,7 @@ platform :ios do
     @solution = FastlaneCore::XamarinSolutionParser.parse(@config[:xamarin_solution])
 
     restore_nugets(@config[:xamarin_solution])
-    restore_xamarin_components(@config[:xamarin_solution])
+    restore_xamarin_components(@config[:xamarin_solution], "xamarinqa@gmail.com")
   end
 
   desc "Runs all the tests"
