@@ -1,0 +1,36 @@
+require_relative 'lib/utils.rb'
+require_relative 'lib/xamarin/xamarin_solution.rb'
+
+default_platform :ios
+
+platform :ios do
+
+  before_all do
+    @config = {}
+    FastlaneCore::XamarinSolution.detect_solutions(@config)
+    restore_nugets(@config[:xamarin_solution])
+    restore_xamarin_components(@config[:xamarin_solution])
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    run_nunit_tests(@config[:xamarin_solution])
+    run_ui_tests(@config[:xamarin_solution])
+  end
+
+  desc "Submit a new Beta Build to Apple TestFlight"
+  desc "This will also make sure the profile is up to date"
+  lane :beta do
+  end
+
+  desc "Deploy a new version to the App Store"
+  lane :release do
+  end
+
+  after_all do |lane|
+  end
+
+  error do |lane, exception|
+  end
+  
+end
